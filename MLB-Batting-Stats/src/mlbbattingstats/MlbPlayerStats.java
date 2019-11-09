@@ -1,16 +1,10 @@
 package mlbbattingstats;
 
 import java.awt.EventQueue;
-import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 
-import javax.imageio.ImageIO;
 import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -170,23 +164,18 @@ public class MlbPlayerStats {
 
 		JLabel playerNameLabel = new JLabel("");
 		playerNameLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		playerNameLabel.setBounds(10, 130, 269, 14);
+		playerNameLabel.setBounds(10, 213, 269, 14);
 		searchPanel.add(playerNameLabel);
 
 		JLabel positionLabel = new JLabel("");
 		positionLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		positionLabel.setBounds(10, 155, 269, 14);
+		positionLabel.setBounds(10, 238, 269, 14);
 		searchPanel.add(positionLabel);
 
 		JLabel teamLabel = new JLabel("");
 		teamLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		teamLabel.setBounds(10, 180, 269, 14);
+		teamLabel.setBounds(10, 263, 269, 14);
 		searchPanel.add(teamLabel);
-
-		JLabel playerPhotoLabel = new JLabel("");
-		playerPhotoLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		playerPhotoLabel.setBounds(10, 223, 269, 213);
-		searchPanel.add(playerPhotoLabel);
 
 		// Search Action Listener
 		searchButton.addActionListener(new ActionListener() {
@@ -220,7 +209,7 @@ public class MlbPlayerStats {
 							String position = newPlayerByName.getPosition();
 							String team = newPlayerByName.getTeamName();
 
-							newPlayerById = newParserById.seasonBattingJsonRequestById(newPlayerByName);
+							newPlayerById = newParserById.seasonBattingJsonRequestById(newPlayerByName.getId());
 
 							newPlayerById.setFullNamePlayer(fullName);
 							newPlayerById.setPosition(position);
@@ -242,22 +231,18 @@ public class MlbPlayerStats {
 								positionLabel.setText(newPlayerById.getPosition());
 								teamLabel.setText(newPlayerById.getTeamName());
 
-								setPlayerHeadShot(newPlayerById);
-
 							} else {
 
 								blankLabels();
 
-								playerNameLabel.setText(newPlayerById.getFullNamePlayer() + " has no batting stats.");
-								setPlayerHeadShot(newPlayerById);
-
+								playerNameLabel.setText("Player has no batting stats.");
 							}
 
 						} else {
 
 							blankLabels();
-							playerNameLabel.setText(playerName + " not found. Try again.");
-							removePlayerHeadShot();
+
+							playerNameLabel.setText("Player not found. Try again.");
 						}
 
 					} catch (Exception e1) {
@@ -278,7 +263,7 @@ public class MlbPlayerStats {
 							String position = newPlayerByName.getPosition();
 							String team = newPlayerByName.getTeamName();
 
-							newPlayerById = newParserById.seasonPitchingJsonRequestById(newPlayerByName);
+							newPlayerByName = newParserById.seasonPitchingJsonRequestById(newPlayerByName.getId());
 
 							newPlayerById.setFullNamePlayer(fullName);
 							newPlayerById.setPosition(position);
@@ -286,34 +271,32 @@ public class MlbPlayerStats {
 
 							if (newPlayerByName.getPlayersFound().equals("1")) {
 
-								firstStatsResultsLabel.setText(newPlayerById.getGamesPitched());
-								secondStatsResultsLabel.setText(newPlayerById.getWins());
-								thirdStatsResultsLabel.setText(newPlayerById.getLosses());
-								fourthStatsResultsLabel.setText(newPlayerById.getWinPercentage());
-								fifthStatsResultsLabel.setText(newPlayerById.getEarnedRuns());
-								sixthStatsResultsLabel.setText(newPlayerById.getGamesStarted());
-								seventhStatsResultsLabel.setText(newPlayerById.getSaves());
-								eighthStatsResultsLabel.setText(newPlayerById.getInningsPitched());
-								ninthStatsResultsLabel.setText(newPlayerById.getStrikeOuts());
+								firstStatsResultsLabel.setText(newPlayerByName.getGamesPitched());
+								secondStatsResultsLabel.setText(newPlayerByName.getWins());
+								thirdStatsResultsLabel.setText(newPlayerByName.getLosses());
+								fourthStatsResultsLabel.setText(newPlayerByName.getWinPercentage());
+								fifthStatsResultsLabel.setText(newPlayerByName.getEarnedRuns());
+								sixthStatsResultsLabel.setText(newPlayerByName.getGamesStarted());
+								seventhStatsResultsLabel.setText(newPlayerByName.getSaves());
+								eighthStatsResultsLabel.setText(newPlayerByName.getInningsPitched());
+								ninthStatsResultsLabel.setText(newPlayerByName.getStrikeOuts());
 
 								playerNameLabel.setText(newPlayerById.getFullNamePlayer());
 								positionLabel.setText(newPlayerById.getPosition());
 								teamLabel.setText(newPlayerById.getTeamName());
 
-								setPlayerHeadShot(newPlayerById);
-
 							} else {
 
 								blankLabels();
-								playerNameLabel.setText(newPlayerById.getFullNamePlayer() + " has no pitching stats.");
-								setPlayerHeadShot(newPlayerById);
+
+								playerNameLabel.setText("Player has no pitching stats.");
 							}
 
 						} else {
 
 							blankLabels();
-							playerNameLabel.setText(playerName + " not found. Try again.");
-							removePlayerHeadShot();
+
+							playerNameLabel.setText("Player not found. Try again.");
 						}
 
 					} catch (Exception e1) {
@@ -368,39 +351,10 @@ public class MlbPlayerStats {
 
 			}
 
-			private void setPlayerHeadShot(MLBPlayer playerId) {
-				String playerHeadshotUrl = "https://securea.mlb.com/mlb/images/players/head_shot/"
-						+ playerId.getId() + ".jpg";
-
-				URL pictureURL = null;
-				try {
-					pictureURL = new URL(playerHeadshotUrl);
-				} catch (MalformedURLException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				Image playerHeadshot = null;
-				try {
-					playerHeadshot = ImageIO.read(pictureURL.openStream());
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				playerPhotoLabel.setIcon(new ImageIcon(playerHeadshot));
-				searchPanel.add(playerPhotoLabel);
-			}
-
-			private void removePlayerHeadShot() {
-				playerPhotoLabel.setIcon(null);
-				searchPanel.add(playerPhotoLabel);
-			}
-
 		});
 
 	}
-
+	
 	// To print the player's name with Upper Case at the beginning
 	public String toCamelCase(String nameGiven) {
 		if (nameGiven == null)

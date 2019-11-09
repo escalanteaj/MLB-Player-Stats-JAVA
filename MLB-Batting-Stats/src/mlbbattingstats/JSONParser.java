@@ -70,10 +70,11 @@ public class JSONParser {
 
 	}
 
-	public MLBPlayer seasonBattingJsonRequestById(MLBPlayer playerId) throws Exception {
+	public MLBPlayer seasonBattingJsonRequestById(String playerId) throws Exception {
 
 		// MLBPlayer to parse the data into.
-		String playerIdSearched = playerId.getId().strip().replaceAll(" ", "%25").toLowerCase();
+		String playerIdSearched = playerId.strip().replaceAll(" ", "%25").toLowerCase();
+		MLBPlayer newPlayer = new MLBPlayer();
 		String seasonYear = "2019";
 
 		// Build the URL
@@ -126,31 +127,32 @@ public class JSONParser {
 			String onBasePlusSlugging = jsonResponse.getJSONObject("sport_hitting_tm").getJSONObject("queryResults")
 					.getJSONObject("row").get("ops").toString();
 
-			playerId.setGamesPlayed(gamesPlayed);
-			playerId.setAtBats(atBats);
-			playerId.setRuns(runs);
-			playerId.setHits(hits);
-			playerId.setHomeRuns(homeRuns);
-			playerId.setRunsBattedIn(runsBattedIn);
-			playerId.setStolenBases(stolenBases);
-			playerId.setBattingAvg(battingAvg);
-			playerId.setOnBasePlusSlugging(onBasePlusSlugging);
+			newPlayer.setGamesPlayed(gamesPlayed);
+			newPlayer.setAtBats(atBats);
+			newPlayer.setRuns(runs);
+			newPlayer.setHits(hits);
+			newPlayer.setHomeRuns(homeRuns);
+			newPlayer.setRunsBattedIn(runsBattedIn);
+			newPlayer.setStolenBases(stolenBases);
+			newPlayer.setBattingAvg(battingAvg);
+			newPlayer.setOnBasePlusSlugging(onBasePlusSlugging);
 
-			playerId.setPlayersFound(checkBattingStats);
+			newPlayer.setPlayersFound(checkBattingStats);
 
 		} else {
 			System.out.println("Player have no batting stats.");
-			playerId.setPlayersFound("2");
+			newPlayer.setPlayersFound("2");
 		}
 
-		return playerId;
+		return newPlayer;
 
 	}
 
-	public MLBPlayer seasonPitchingJsonRequestById(MLBPlayer playerId) throws Exception {
+	public MLBPlayer seasonPitchingJsonRequestById(String playerId) throws Exception {
 
 		// MLBPlayer to parse the data into.
-		String playerIdSearched = playerId.getId().strip().replaceAll(" ", "%25").toLowerCase();
+		String playerIdSearched = playerId.strip().replaceAll(" ", "%25").toLowerCase();
+		MLBPlayer newPlayer = new MLBPlayer();
 		String seasonYear = "2019";
 
 		// Build the URL
@@ -203,23 +205,23 @@ public class JSONParser {
 			String strikeOuts = jsonResponse.getJSONObject("sport_pitching_tm").getJSONObject("queryResults")
 					.getJSONObject("row").get("so").toString();
 
-			playerId.setGamesPitched(gamesPitched);
-			playerId.setWins(wins);
-			playerId.setLosses(losses);
-			playerId.setWinPercentage(winPercentage);
-			playerId.setEarnedRuns(earnedRuns);
-			playerId.setGamesStarted(gamesStarted);
-			playerId.setSaves(saves);
-			playerId.setInningsPitched(inningsPitched);
-			playerId.setStrikeOuts(strikeOuts);
+			newPlayer.setGamesPitched(gamesPitched);
+			newPlayer.setWins(wins);
+			newPlayer.setLosses(losses);
+			newPlayer.setWinPercentage(winPercentage);
+			newPlayer.setEarnedRuns(earnedRuns);
+			newPlayer.setGamesStarted(gamesStarted);
+			newPlayer.setSaves(saves);
+			newPlayer.setInningsPitched(inningsPitched);
+			newPlayer.setStrikeOuts(strikeOuts);
 
-			playerId.setPlayersFound(checkPitchingStats);
+			newPlayer.setPlayersFound(checkPitchingStats);
 		} else {
 			System.out.println("Player have no pitching stats.");
-			playerId.setPlayersFound("2");
+			newPlayer.setPlayersFound("2");
 		}
 
-		return playerId;
+		return newPlayer;
 
 	}
 
